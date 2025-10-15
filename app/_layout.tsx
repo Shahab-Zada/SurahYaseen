@@ -2,16 +2,18 @@ import React from 'react';
 import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import Header from '../Components/Header';
+
 type IconName = React.ComponentProps<typeof Ionicons>['name'];
 
 export default function Layout() {
+   
+
   return (
     <SafeAreaProvider>
-      <Header />
+  
       <Tabs
         screenOptions={({ route }) => {
-          let iconName: IconName = 'home';
+          let iconName: IconName = 'book';
           let tabBarLabel = route.name;
 
           switch (route.name) {
@@ -19,13 +21,18 @@ export default function Layout() {
               iconName = 'book';
               tabBarLabel = 'Surahs';
               break;
-            case 'fav':
-              iconName = 'bookmark';
-              tabBarLabel = 'Favorites';
+           
+            case 'setting':
+              iconName = 'settings'; // 🧩 nice outlined settings icon
+              tabBarLabel = 'Setting';
               break;
-            case 'settings':
-              iconName = 'settings';
-              tabBarLabel = 'Settings';
+                 case 'about': // 👈 added new tab
+              iconName = 'information-circle';
+              tabBarLabel = 'About';
+              break;
+           case 'video':
+              iconName = 'logo-youtube';
+              tabBarLabel = 'Watch';
               break;
           }
 
@@ -36,8 +43,6 @@ export default function Layout() {
             tabBarLabel,
             tabBarActiveTintColor: '#007AFF',
             tabBarInactiveTintColor: 'gray',
-
-            // This disables the default Expo header
             headerShown: false,
           };
         }}

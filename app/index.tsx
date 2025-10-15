@@ -5,11 +5,12 @@ import {
   FlatList,
   TouchableOpacity,
   StyleSheet,
- 
 } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 import { useRouter } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context'; 
+import { SafeAreaView } from 'react-native-safe-area-context';
+import Header from '@/Components/Header';
+
 const surahList = [
   { key: 'surahyaseen', name: 'Surah Yaseen', icon: 'book' },
   { key: 'suraharrahman', name: 'Surah Ar-Rahman', icon: 'leaf' },
@@ -49,7 +50,8 @@ export default function Index() {
   );
 
   return (
-  
+    <View style={styles.safeArea}>
+      <Header />
       <FlatList
         data={surahList}
         keyExtractor={(item) => item.key}
@@ -58,7 +60,7 @@ export default function Index() {
         columnWrapperStyle={styles.row}
         contentContainerStyle={styles.listContent}
       />
-
+    </View>
   );
 }
 
