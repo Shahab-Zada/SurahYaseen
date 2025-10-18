@@ -1,187 +1,272 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef } from "react";
 import {
   View,
-  Text,
+  FlatList,
+  Image,
   StyleSheet,
   useWindowDimensions,
-  TouchableOpacity,
-  Animated,
-  ScrollView,
-} from 'react-native';
-import { useLocalSearchParams } from 'expo-router';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import surahIndex from '../../Components/surahIndex';
+  Text,
+  NativeScrollEvent,
+  NativeSyntheticEvent,
+} from "react-native";
+import { useLocalSearchParams } from "expo-router";
 
-const toArabicNumber = (num: number): string => {
-  const arabicDigits = ['٠', '١', '٢', '٣', '٤', '٥', '٦', '٧', '٨', '٩'];
-  return num.toString().split('').map(d => arabicDigits[+d]).join('');
+// Import Surah JSON
+import surahyaseen from "../data/surahyaseen.json";
+import surahalrahman from "../data/surahrahman.json";
+import surahwaqiah from "../data/surahWaqia.json";
+import surahmulk from "../data/surahmulk.json";
+import surahmuzamil from "../data/surahmuzmil.json";
+import lastsurahs from "../data/lastsurahs.json"
+
+type SurahData = {
+  surah: string;
+  images: string[];
 };
 
-export default function SurahDetail() {
-  const { id } = useLocalSearchParams() as { id: keyof typeof surahIndex };
-  const surahData = surahIndex[id];
-  const { height: screenHeight, width: screenWidth } = useWindowDimensions();
+const surahDataMap: Record<string, SurahData> = {
+  yaseen: surahyaseen,
+   rahman: surahalrahman,
+   waqiah: surahwaqiah,
+    mulk: surahmulk,
+    muzamil:surahmuzamil,
+    last:lastsurahs,
+}
 
-  const [pages, setPages] = useState<string[]>([]);
-  const [page, setPage] = useState(0);
-  const translateX = useRef(new Animated.Value(0)).current;
+export default function SurahViewer() {
+  const { id } = useLocalSearchParams();
+  const { width, height } = useWindowDimensions();
+  const [images, setImages] = useState<any[]>([]);
+  const [error, setError] = useState("");
+  const [page, setPage] = useState(1);
+  const flatListRef = useRef<FlatList>(null);
 
   useEffect(() => {
-    if (!surahData) return;
+    if (!id) return;
 
-    const allText = surahData.verse
-      .map(v => `${v.text} ﴿${toArabicNumber(v.verse)}﴾`)
-      .join(' ');
-
-    // Calculate visible text without breaking words
-    const linesPerPage = Math.floor((screenHeight * 0.92) / 44);
-    const charsPerLine = Math.floor(screenWidth / 13);
-    const charsPerPage = linesPerPage * charsPerLine;
-
-    const pageTexts: string[] = [];
-    let currentIndex = 0;
-
-    while (currentIndex < allText.length) {
-      let sliceEnd = currentIndex + charsPerPage;
-      if (sliceEnd < allText.length) {
-        const nextSpace = allText.lastIndexOf(' ', sliceEnd);
-        if (nextSpace > currentIndex) sliceEnd = nextSpace;
-      }
-      pageTexts.push(allText.slice(currentIndex, sliceEnd).trim());
-      currentIndex = sliceEnd;
+    const surah = surahDataMap[id as string];
+    if (!surah) {
+      setError("Surah not found.");
+      return;
     }
 
-    setPages(pageTexts);
-    setPage(0);
-  }, [surahData, screenHeight, screenWidth]);
+    try {
+      const loaded = surah.images.map((imgPath) => {
+        switch (imgPath) {
+          case "assets/images/surahyaseen/1.jpeg":
+            return require("../../assets/images/surahyaseen/1.jpeg");
+          case "assets/images/surahyaseen/2.jpeg":
+            return require("../../assets/images/surahyaseen/2.jpeg");
+          case "assets/images/surahyaseen/3.jpeg":
+            return require("../../assets/images/surahyaseen/3.jpeg");
+          case "assets/images/surahyaseen/4.jpeg":
+            return require("../../assets/images/surahyaseen/4.jpeg");
+          case "assets/images/surahyaseen/5.jpeg":
+            return require("../../assets/images/surahyaseen/5.jpeg");
+          case "assets/images/surahyaseen/6.jpeg":
+            return require("../../assets/images/surahyaseen/6.jpeg");
+          case "assets/images/surahyaseen/7.jpeg":
+            return require("../../assets/images/surahyaseen/7.jpeg");
+          case "assets/images/surahyaseen/8.jpeg":
+            return require("../../assets/images/surahyaseen/8.jpeg");
+          case "assets/images/surahyaseen/9.jpeg":
+            return require("../../assets/images/surahyaseen/9.jpeg");
+          case "assets/images/surahyaseen/10.jpeg":
+            return require("../../assets/images/surahyaseen/10.jpeg");
+          case "assets/images/surahyaseen/11.jpeg":
+            return require("../../assets/images/surahyaseen/11.jpeg");
+          case "assets/images/surahyaseen/12.jpeg":
+            return require("../../assets/images/surahyaseen/12.jpeg");
+          case "assets/images/surahyaseen/13.jpeg":
+            return require("../../assets/images/surahyaseen/13.jpeg");
 
-  const handlePageChange = (direction: 'next' | 'prev') => {
-    const move = direction === 'next' ? -screenWidth : screenWidth;
 
-    Animated.timing(translateX, {
-      toValue: move,
-      duration: 250,
-      useNativeDriver: true,
-    }).start(() => {
-      setPage(prev =>
-        direction === 'next'
-          ? Math.min(prev + 1, pages.length - 1)
-          : Math.max(prev - 1, 0)
-      );
-      translateX.setValue(-move);
-      Animated.timing(translateX, {
-        toValue: 0,
-        duration: 250,
-        useNativeDriver: true,
-      }).start();
-    });
+            case "assets/images/surahalrahman/1.jpeg":
+  return require("../../assets/images/surahalrahman/1.jpeg");
+case "assets/images/surahalrahman/2.jpeg":
+  return require("../../assets/images/surahalrahman/2.jpeg");
+case "assets/images/surahalrahman/3.jpeg":
+  return require("../../assets/images/surahalrahman/3.jpeg");
+case "assets/images/surahalrahman/4.jpeg":
+  return require("../../assets/images/surahalrahman/4.jpeg");
+  case "assets/images/surahalrahman/5.jpeg":
+  return require("../../assets/images/surahalrahman/5.jpeg");
+  case "assets/images/surahalrahman/6.jpeg":
+  return require("../../assets/images/surahalrahman/6.jpeg");
+  case "assets/images/surahalrahman/7.jpeg":
+  return require("../../assets/images/surahalrahman/7.jpeg");
+  case "assets/images/surahalrahman/8.jpeg":
+  return require("../../assets/images/surahalrahman/8.jpeg");
+
+
+     case "assets/images/surahwaqiah/1.jpeg":
+  return require("../../assets/images/surahwaqiah/1.jpeg");
+case "assets/images/surahwaqiah/2.jpeg":
+  return require("../../assets/images/surahwaqiah/2.jpeg");
+case "assets/images/surahwaqiah/3.jpeg":
+  return require("../../assets/images/surahwaqiah/3.jpeg");
+case "assets/images/surahwaqiah/4.jpeg":
+  return require("../../assets/images/surahwaqiah/4.jpeg");
+  case "assets/images/surahwaqiah/5.jpeg":
+  return require("../../assets/images/surahwaqiah/5.jpeg");
+  case "assets/images/surahwaqiah/6.jpeg":
+  return require("../../assets/images/surahwaqiah/6.jpeg");
+  case "assets/images/surahwaqiah/7.jpeg":
+  return require("../../assets/images/surahwaqiah/7.jpeg");
+  case "assets/images/surahwaqiah/8.jpeg":
+  return require("../../assets/images/surahwaqiah/8.jpeg");
+ case "assets/images/surahwaqiah/9.jpeg":
+  return require("../../assets/images/surahwaqiah/9.jpeg");
+
+
+
+  
+            case "assets/images/surahmulk/1.jpeg":
+  return require("../../assets/images/surahmulk/1.jpeg");
+case "assets/images/surahmulk/2.jpeg":
+  return require("../../assets/images/surahmulk/2.jpeg");
+case "assets/images/surahmulk/3.jpeg":
+  return require("../../assets/images/surahmulk/3.jpeg");
+case "assets/images/surahmulk/4.jpeg":
+  return require("../../assets/images/surahmulk/4.jpeg");
+  case "assets/images/surahmulk/5.jpeg":
+  return require("../../assets/images/surahmulk/5.jpeg");
+  case "assets/images/surahmulk/6.jpeg":
+  return require("../../assets/images/surahmulk/6.jpeg");
+
+
+    case "assets/images/surahmuzamil/1.jpeg":
+  return require("../../assets/images/surahmuzamil/1.jpeg");
+case "assets/images/surahmuzamil/2.jpeg":
+  return require("../../assets/images/surahmuzamil/2.jpeg");
+case "assets/images/surahmuzamil/3.jpeg":
+  return require("../../assets/images/surahmuzamil/3.jpeg");
+case "assets/images/surahmuzamil/4.jpeg":
+  return require("../../assets/images/surahmuzamil/4.jpeg");
+
+case "assets/images/last/1.jpeg":
+            return require("../../assets/images/last/1.jpeg");
+          case "assets/images/last/2.jpeg":
+            return require("../../assets/images/last/2.jpeg");
+          case "assets/images/last/3.jpeg":
+            return require("../../assets/images/last/3.jpeg");
+          case "assets/images/last/4.jpeg":
+            return require("../../assets/images/last/4.jpeg");
+          case "assets/images/last/5.jpeg":
+            return require("../../assets/images/last/5.jpeg");
+          case "assets/images/last/6.jpeg":
+            return require("../../assets/images/last/6.jpeg");
+          case "assets/images/last/7.jpeg":
+            return require("../../assets/images/last/7.jpeg");
+          case "assets/images/last/8.jpeg":
+            return require("../../assets/images/last/8.jpeg");
+          case "assets/images/last/9.jpeg":
+            return require("../../assets/images/last/9.jpeg");
+          case "assets/images/last/10.jpeg":
+            return require("../../assets/images/last/10.jpeg");
+          case "assets/images/last/11.jpeg":
+            return require("../../assets/images/last/11.jpeg");
+          case "assets/images/last/12.jpeg":
+            return require("../../assets/images/last/12.jpeg");
+          case "assets/images/last/13.jpeg":
+            return require("../../assets/images/last/13.jpeg");
+                case "assets/images/last/14.jpeg":
+            return require("../../assets/images/last/14.jpeg");
+                case "assets/images/last/15.jpeg":
+            return require("../../assets/images/last/15.jpeg");
+                case "assets/images/last/16.jpeg":
+            return require("../../assets/images/last/16.jpeg");
+                case "assets/images/last/17.jpeg":
+            return require("../../assets/images/last/17.jpeg");
+                case "assets/images/last/18.jpeg":
+            return require("../../assets/images/last/18.jpeg");
+
+
+
+
+
+          default:
+            throw new Error(`Image not found: ${imgPath}`);
+        }
+      });
+      setImages(loaded); // ✅ reverse order so last page appears first (RTL)
+    } catch (e: any) {
+      setError(e.message);
+    }
+  }, [id]);
+
+  const handleScroll = (event: NativeSyntheticEvent<NativeScrollEvent>) => {
+    const offsetX = event.nativeEvent.contentOffset.x;
+    const currentPage = Math.round(offsetX / width) + 1;
+    setPage(currentPage);
   };
 
-  if (!surahData) {
+  if (error) {
     return (
       <View style={styles.center}>
-        <Text style={styles.errorText}>Surah not found.</Text>
+        <Text style={styles.errorText}>{error}</Text>
       </View>
     );
   }
 
   return (
-    <SafeAreaView style={styles.safeArea}>
-      <View style={styles.fullCard}>
-        <Animated.View
-          style={[styles.textContainer, { transform: [{ translateX }] }]}
-        >
-          <ScrollView showsVerticalScrollIndicator={false}>
-            <Text style={styles.quranText}>{pages[page]}</Text>
-          </ScrollView>
-        </Animated.View>
+    <View style={styles.container}>
+      <FlatList
+        ref={flatListRef}
+        data={images}
+        keyExtractor={(_, index) => index.toString()}
+        horizontal
+        pagingEnabled
+        showsHorizontalScrollIndicator={false}
+        onScroll={handleScroll}
+        scrollEventThrottle={16}
+        style={{ transform: [{ scaleX: -1 }] }} 
+        renderItem={({ item }) => (
+          <View style={[styles.imageContainer, { width, transform: [{ scaleX: -1 }] }]}> 
+          
+            <Image
+              source={item}
+              style={{
+                 width: width ,
+                height: height * 0.90,
+                resizeMode: "contain",
+                backgroundColor: "white",
+              }}
+            />
+          </View>
+        )}
+      />
 
-        {/* Pagination buttons */}
-        <View style={styles.pagination}>
-          <TouchableOpacity
-            onPress={() => handlePageChange('next')}
-            disabled={page === pages.length - 1}
-            style={[styles.pageButton, page === pages.length - 1 && styles.disabledButton]}
-          >
-            <Text style={styles.pageButtonText}>Next</Text>
-          </TouchableOpacity>
-
-          <Text style={styles.pageInfo}>
-            {page + 1} / {pages.length || 1}
-          </Text>
-
-          <TouchableOpacity
-            onPress={() => handlePageChange('prev')}
-            disabled={page === 0}
-            style={[styles.pageButton, page === 0 && styles.disabledButton]}
-          >
-            <Text style={styles.pageButtonText}>Prev</Text>
-          </TouchableOpacity>
-        </View>
+      {/* Page Number (bottom-left corner) */}
+      <View style={styles.pageIndicator}>
+        <Text style={styles.pageText}>
+          {page} / {images.length || 1}
+        </Text>
       </View>
-    </SafeAreaView>
+    </View>
   );
 }
 
 const styles = StyleSheet.create({
-  safeArea: {
-    flex: 1,
-    backgroundColor: '#fff',
+  container: { flex: 1, backgroundColor: "#fff" },
+  imageContainer: {
+    justifyContent: "center",
+    alignItems: "center",
   },
-  fullCard: {
-    flex: 1,
-    width: '100%',
-    backgroundColor: '#fff',
-    paddingHorizontal: 20,
-    justifyContent: 'space-between',
-  },
-  textContainer: {
-    flex: 1,
-    justifyContent: 'flex-start',
-    paddingTop: 8,
-  },
-  quranText: {
-    fontSize: 32,
-    lineHeight: 48,
-    color: '#111',
-    writingDirection: 'rtl',
-    textAlign: 'justify',
-    fontWeight: '700',
-  },
-  pagination: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 12,
-    gap: 25,
-  },
-  pageButton: {
-    backgroundColor: '#007AFF',
-    paddingVertical: 8,
-    paddingHorizontal: 24,
+  center: { flex: 1, justifyContent: "center", alignItems: "center" },
+  errorText: { fontSize: 18, color: "red" },
+  pageIndicator: {
+    position: "absolute",
+    bottom: 0,
+    left: 15,
+
+    paddingHorizontal: 10,
+    paddingVertical: 4,
     borderRadius: 10,
   },
-  disabledButton: {
-    backgroundColor: '#a0c4ff',
-  },
-  pageButtonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: '700',
-  },
-  pageInfo: {
-    fontSize: 18,
-    color: '#444',
-    fontWeight: '600',
-  },
-  center: {
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: '#fff',
-  },
-  errorText: {
-    fontSize: 20,
-    color: 'red',
+  pageText: {
+    color: "black",
+    fontSize: 14,
+    fontWeight: "600",
   },
 });

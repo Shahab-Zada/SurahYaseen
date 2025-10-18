@@ -9,7 +9,7 @@ export default function Layout() {
    
 
   return (
-    <SafeAreaProvider>
+  
   
       <Tabs
         screenOptions={({ route }) => {
@@ -22,10 +22,7 @@ export default function Layout() {
               tabBarLabel = 'Surahs';
               break;
            
-            case 'setting':
-              iconName = 'settings'; // 🧩 nice outlined settings icon
-              tabBarLabel = 'Setting';
-              break;
+           
                  case 'about': // 👈 added new tab
               iconName = 'information-circle';
               tabBarLabel = 'About';
@@ -47,6 +44,6 @@ export default function Layout() {
           };
         }}
       />
-    </SafeAreaProvider>
+  
   );
 }
