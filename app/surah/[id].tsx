@@ -96,7 +96,6 @@ export default function SurahViewer() {
             return require("../../assets/images/surahalrahman/7.jpeg");
           case "assets/images/surahalrahman/8.jpeg":
             return require("../../assets/images/surahalrahman/8.jpeg");
-
           case "assets/images/surahwaqiah/1.jpeg":
             return require("../../assets/images/surahwaqiah/1.jpeg");
           case "assets/images/surahwaqiah/2.jpeg":
@@ -115,7 +114,6 @@ export default function SurahViewer() {
             return require("../../assets/images/surahwaqiah/8.jpeg");
           case "assets/images/surahwaqiah/9.jpeg":
             return require("../../assets/images/surahwaqiah/9.jpeg");
-
           case "assets/images/surahmulk/1.jpeg":
             return require("../../assets/images/surahmulk/1.jpeg");
           case "assets/images/surahmulk/2.jpeg":
@@ -128,7 +126,6 @@ export default function SurahViewer() {
             return require("../../assets/images/surahmulk/5.jpeg");
           case "assets/images/surahmulk/6.jpeg":
             return require("../../assets/images/surahmulk/6.jpeg");
-
           case "assets/images/surahmuzamil/1.jpeg":
             return require("../../assets/images/surahmuzamil/1.jpeg");
           case "assets/images/surahmuzamil/2.jpeg":
@@ -137,7 +134,6 @@ export default function SurahViewer() {
             return require("../../assets/images/surahmuzamil/3.jpeg");
           case "assets/images/surahmuzamil/4.jpeg":
             return require("../../assets/images/surahmuzamil/4.jpeg");
-
           case "assets/images/last/1.jpeg":
             return require("../../assets/images/last/1.jpeg");
           case "assets/images/last/2.jpeg":
