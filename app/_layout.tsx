@@ -1,6 +1,6 @@
-import React from 'react';
-import { Tabs } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
+import { Tabs } from 'expo-router';
+import React from 'react';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 type IconName = React.ComponentProps<typeof Ionicons>['name'];
@@ -10,7 +10,8 @@ export default function Layout() {
 
   return (
   
-  
+      <SafeAreaProvider> 
+
       <Tabs
         screenOptions={({ route }) => {
           let iconName: IconName = 'book';
@@ -44,6 +45,6 @@ export default function Layout() {
           };
         }}
       />
-  
+  </SafeAreaProvider> 
   );
 }
