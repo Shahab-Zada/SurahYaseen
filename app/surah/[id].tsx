@@ -227,7 +227,7 @@ case "assets/images/last/1.jpeg":
             <Image
               source={item}
               style={{
-                 width: width ,
+                 width: 1200 ,
                 height: height * 0.90,
                 resizeMode: "contain",
                 backgroundColor: "white",
@@ -257,7 +257,7 @@ const styles = StyleSheet.create({
   errorText: { fontSize: 18, color: "red" },
   pageIndicator: {
     position: "absolute",
-    bottom: 0,
+    bottom: 50,
     left: 15,
 
     paddingHorizontal: 10,
