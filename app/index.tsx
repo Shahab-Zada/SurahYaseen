@@ -63,7 +63,7 @@ export default function Home() {
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#f8f9f3" },
+  container: { flex: 1,     backgroundColor:"#00FFFF", },
   listContainer: { paddingHorizontal: 16, paddingVertical: 20 },
   row: {
     justifyContent: "space-between",
@@ -71,6 +71,7 @@ const styles = StyleSheet.create({
   },
   card: {
     backgroundColor: "white",
+  
     borderWidth: 1,
     borderColor: "#cde6b8",
     borderRadius: 16,
@@ -85,7 +86,7 @@ const styles = StyleSheet.create({
   },
   nameTop: {
     fontSize: 16,
-    fontWeight: "700",
+    fontWeight: "900",
     color: "#2e3d20",
     textAlign: "center",
     marginBottom: 6,
@@ -100,11 +101,13 @@ const styles = StyleSheet.create({
     height: 150,
     justifyContent: "center",
     alignItems: "center",
+    
   },
   textOnly: {
     fontSize: 18,
     fontWeight: "700",
     color: "#2e3d20",
     textAlign: "center",
+  
   },
 });

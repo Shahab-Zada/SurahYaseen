@@ -8,7 +8,7 @@ export default function Header() {
 
 
   // Replace with your WhatsApp number & message
-  const whatsappUrl = 'https://wa.me/3199001379?text=Hello%20from%20my%20app';
+  const whatsappUrl = 'https://wa.me/966551981751?text=Hello%20from%20my%20app';
 
 
   const openWhatsApp = () => {
@@ -24,7 +24,7 @@ export default function Header() {
     <SafeAreaView>
     <View style={[styles.header]}>
      
-      <Text style={styles.title}>My Quran App</Text>
+      <Text style={styles.title}>Surah Yaseen App</Text>
       <TouchableOpacity onPress={openWhatsApp} style={styles.button}>
         <Ionicons name="logo-whatsapp" size={28} color="#25D366" />
       </TouchableOpacity>
