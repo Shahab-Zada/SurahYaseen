@@ -10,6 +10,7 @@ import {
   NativeSyntheticEvent,
 } from "react-native";
 import { useLocalSearchParams } from "expo-router";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 // Import Surah JSON
 import surahyaseen from "../data/surahyaseen.json";
@@ -53,6 +54,7 @@ export default function SurahViewer() {
     try {
       const loaded = surah.images.map((imgPath) => {
         switch (imgPath) {
+          // Surah Yaseen
           case "assets/images/surahyaseen/1.jpeg":
             return require("../../assets/images/surahyaseen/1.jpeg");
           case "assets/images/surahyaseen/2.jpeg":
@@ -80,6 +82,7 @@ export default function SurahViewer() {
           case "assets/images/surahyaseen/13.jpeg":
             return require("../../assets/images/surahyaseen/13.jpeg");
 
+          // Surah Rahman
           case "assets/images/surahalrahman/1.jpeg":
             return require("../../assets/images/surahalrahman/1.jpeg");
           case "assets/images/surahalrahman/2.jpeg":
@@ -96,6 +99,8 @@ export default function SurahViewer() {
             return require("../../assets/images/surahalrahman/7.jpeg");
           case "assets/images/surahalrahman/8.jpeg":
             return require("../../assets/images/surahalrahman/8.jpeg");
+
+          // Surah Waqiah
           case "assets/images/surahwaqiah/1.jpeg":
             return require("../../assets/images/surahwaqiah/1.jpeg");
           case "assets/images/surahwaqiah/2.jpeg":
@@ -114,6 +119,8 @@ export default function SurahViewer() {
             return require("../../assets/images/surahwaqiah/8.jpeg");
           case "assets/images/surahwaqiah/9.jpeg":
             return require("../../assets/images/surahwaqiah/9.jpeg");
+
+          // Surah Mulk
           case "assets/images/surahmulk/1.jpeg":
             return require("../../assets/images/surahmulk/1.jpeg");
           case "assets/images/surahmulk/2.jpeg":
@@ -126,6 +133,8 @@ export default function SurahViewer() {
             return require("../../assets/images/surahmulk/5.jpeg");
           case "assets/images/surahmulk/6.jpeg":
             return require("../../assets/images/surahmulk/6.jpeg");
+
+          // Surah Muzamil
           case "assets/images/surahmuzamil/1.jpeg":
             return require("../../assets/images/surahmuzamil/1.jpeg");
           case "assets/images/surahmuzamil/2.jpeg":
@@ -134,6 +143,8 @@ export default function SurahViewer() {
             return require("../../assets/images/surahmuzamil/3.jpeg");
           case "assets/images/surahmuzamil/4.jpeg":
             return require("../../assets/images/surahmuzamil/4.jpeg");
+
+          // Last Surahs
           case "assets/images/last/1.jpeg":
             return require("../../assets/images/last/1.jpeg");
           case "assets/images/last/2.jpeg":
@@ -175,7 +186,8 @@ export default function SurahViewer() {
             throw new Error(`Image not found: ${imgPath}`);
         }
       });
-      setImages(loaded); // ✅ reverse order so last page appears first (RTL)
+
+      setImages(loaded);
     } catch (e: any) {
       setError(e.message);
     }
@@ -196,67 +208,81 @@ export default function SurahViewer() {
   }
 
   return (
-    <View style={styles.container}>
-      <FlatList
-        ref={flatListRef}
-        data={images}
-        keyExtractor={(_, index) => index.toString()}
-        horizontal
-        pagingEnabled
-        showsHorizontalScrollIndicator={false}
-        onScroll={handleScroll}
-        scrollEventThrottle={16}
-        style={{ transform: [{ scaleX: -1 }] }}
-        renderItem={({ item }) => (
-          <View
-            style={[
-              styles.imageContainer,
-              { width, transform: [{ scaleX: -1 }] },
-            ]}
-          >
-            <Image
-              source={item}
-              style={{
-                width: width,
-                height: height * 0.9,
-                resizeMode: "contain",
-                backgroundColor: "white",
-              }}
-            />
-          </View>
-        )}
-      />
+    <SafeAreaView style={styles.container}>
+      <View style={styles.viewerWrapper}>
+        <FlatList
+          ref={flatListRef}
+          data={images}
+          keyExtractor={(_, index) => index.toString()}
+          horizontal
+          pagingEnabled
+          showsHorizontalScrollIndicator={false}
+          onScroll={handleScroll}
+          scrollEventThrottle={16}
+          style={{ transform: [{ scaleX: -1 }] }}
+          renderItem={({ item }) => (
+            <View
+              style={[
+                styles.imageContainer,
+                { width, transform: [{ scaleX: -1 }] },
+              ]}
+            >
+              <Image
+                source={item}
+                style={{
+                  width: width,
+                  height: height * 0.9,
+                  resizeMode: "contain",
+                  backgroundColor: "white",
+                }}
+              />
+            </View>
+          )}
+        />
 
-      {/* Page Number (bottom-left corner) */}
-      <View style={styles.pageIndicator}>
-        <Text style={styles.pageText}>
-          {page} / {images.length || 1}
-        </Text>
+        {/* Page indicator */}
+        <View style={styles.pageIndicator}>
+          <Text style={styles.pageText}>
+            {page} / {images.length || 1}
+          </Text>
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }
 
 const styles = StyleSheet.create({
-  container: { flex: 1, backgroundColor: "#fff" },
-  imageContainer: {
+  container: {
+    flex: 1,
+    backgroundColor: "#fff",
+  },
+  viewerWrapper: {
+    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
-  center: { flex: 1, justifyContent: "center", alignItems: "center" },
-  errorText: { fontSize: 18, color: "red" },
+  imageContainer: {
+    justifyContent: "center",
+    alignItems: "center",
+    height: "100%",
+  },
+  center: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  errorText: {
+    fontSize: 18,
+    color: "red",
+  },
   pageIndicator: {
-    position: "absolute",
-    bottom: 0,
-    left: 15,
-
-    paddingHorizontal: 10,
-    paddingVertical: 4,
-    borderRadius: 10,
+    alignItems: "center",
+    justifyContent: "center",
+    marginVertical: 8,
   },
   pageText: {
     color: "black",
-    fontSize: 14,
-    fontWeight: "600",
+    fontSize: 15,
+    fontWeight: "900",
   },
 });
